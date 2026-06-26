@@ -1,12 +1,5 @@
 """
 cache.py — Redis-backed response cache for the RAG pipeline.
-
-Cache key = SHA-256( collection_name + normalised_query )
-Cache value = JSON blob  { answer, sources, model, chunks_retrieved }
-TTL = REDIS_TTL seconds (default 1 hour)
-
-Designed to be fail-soft: every method catches Redis errors and falls back
-gracefully so the app continues to work without caching.
 """
 from __future__ import annotations
 
@@ -20,7 +13,6 @@ import redis
 from config import REDIS_TTL, REDIS_URL
 
 logger = logging.getLogger(__name__)
-
 
 class RAGCache:
     """Thread-safe, fail-soft Redis cache for RAG query results."""
@@ -40,53 +32,60 @@ class RAGCache:
             self.available = False
             logger.warning("⚠️  Cache: Redis unavailable (%s). Caching disabled.", exc)
 
+    # ── Generic JSON helpers ─────────────────────────────────────────────────
+
+    def get_json(self, key: str) -> Any | None:
+        if not self.available:
+            return None
+        try:
+            raw = self._client.get(key)
+            return json.loads(raw) if raw else None
+        except Exception as exc:
+            logger.error("Cache.get_json error: %s", exc)
+            return None
+
+    def set_json(self, key: str, value: Any, ttl: int | None = None) -> bool:
+        if not self.available:
+            return False
+        try:
+            self._client.setex(key, ttl or REDIS_TTL, json.dumps(value, default=str))
+            return True
+        except Exception as exc:
+            logger.error("Cache.set_json error: %s", exc)
+            return False
+
+    def delete(self, key: str) -> None:
+        if not self.available:
+            return
+        try:
+            self._client.delete(key)
+        except Exception as exc:
+            logger.error("Cache.delete error: %s", exc)
+
     # ── Key helpers ──────────────────────────────────────────────────────────
 
     @staticmethod
     def _make_key(query: str, collection: str) -> str:
-        """
-        Deterministic, collision-resistant cache key.
-        Normalise query to lowercase + stripped so minor case differences hit cache.
-        """
         payload = f"{collection}||{query.lower().strip()}"
         digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
         return f"rag:{digest}"
 
-    # ── Core operations ──────────────────────────────────────────────────────
+    # ── Core operations (Refactored to use helpers) ──────────────────────────
 
     def get(self, query: str, collection: str) -> dict[str, Any] | None:
-        """Return cached result dict, or None on miss / error."""
-        if not self.available:
-            return None
-        try:
-            raw = self._client.get(self._make_key(query, collection))
-            if raw:
-                logger.debug("🎯 Cache HIT  | q=%.60s", query)
-                return json.loads(raw)
+        key = self._make_key(query, collection)
+        result = self.get_json(key)
+        if result:
+            logger.debug("🎯 Cache HIT  | q=%.60s", query)
+        else:
             logger.debug("💨 Cache MISS | q=%.60s", query)
-            return None
-        except Exception as exc:
-            logger.error("Cache.get error: %s", exc)
-            return None
+        return result
 
-    def set(
-        self,
-        query: str,
-        collection: str,
-        payload: dict[str, Any],
-        ttl: int | None = None,
-    ) -> bool:
-        """Persist payload; return True on success."""
-        if not self.available:
-            return False
-        try:
-            key = self._make_key(query, collection)
-            self._client.setex(key, ttl or REDIS_TTL, json.dumps(payload, default=str))
-            logger.debug("💾 Cache SET  | q=%.60s | ttl=%ds", query, ttl or REDIS_TTL)
-            return True
-        except Exception as exc:
-            logger.error("Cache.set error: %s", exc)
-            return False
+    def set(self, query: str, collection: str, payload: dict[str, Any], ttl: int | None = None) -> bool:
+        key = self._make_key(query, collection)
+        return self.set_json(key, payload, ttl)
+
+    
 
     def invalidate_all(self) -> int:
         if not self.available:
