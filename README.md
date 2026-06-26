@@ -83,9 +83,10 @@ File / Directory
 | **Security Tier 1** | Regex-based input sanitisation & injection detection |
 | **Security Tier 2** | Redis sliding-window rate limiter |
 | **Security Tier 3** | LLM Guard (PromptInjection + Toxicity + Relevance) |
+| **Deduplication** | Automatic point ID verification before upload to skip duplicates |
 | **Document types** | PDF, TXT, Markdown, mixed directories |
-| **UI** | Streamlit — chat interface, source citations, cache stats |
-| **Deployment** | Docker + docker-compose; ECS Fargate ready |
+| **UI** | Glassmorphic cyber-dark UI, high-contrast typography, styled citation cards, cache metrics |
+| **Deployment** | Docker + docker-compose, Streamlit Cloud ready |
 
 ---
 
@@ -146,6 +147,20 @@ then upload a document to start chatting.
    ```
    REDIS_URL=rediss://default:your-token@your-endpoint.upstash.io:6379
    ```
+
+### Streamlit Cloud Deployment
+1. Push your project files to a GitHub repository.
+2. Go to [Streamlit Share](https://share.streamlit.io/) and click **"New App"**.
+3. Select your repository, set the branch to `main`, and main file path to `app.py`.
+4. Click **"Advanced settings..."** and input your environment secrets in the **Secrets** text area (in TOML format):
+   ```toml
+   OPENAI_API_KEY = "sk-..."
+   QDRANT_URL = "https://..."
+   QDRANT_API_KEY = "..."
+   QDRANT_COLLECTION = "documents"
+   REDIS_URL = "rediss://..."
+   ```
+5. Click **"Deploy!"**.
 
 ---
 

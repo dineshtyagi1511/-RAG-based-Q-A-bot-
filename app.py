@@ -495,8 +495,7 @@ def _main():
     # Onboarding hint
     if not st.session_state.ingested:
         st.info(
-            "👈 **Get started:** Enter your OpenAI API key in the sidebar, "
-            "then upload or point to a document to build the knowledge base."
+            "👈 **Get started:** upload or point to a document to build the knowledge base."
         )
 
     # Chat history
