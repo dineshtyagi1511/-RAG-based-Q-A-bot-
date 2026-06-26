@@ -1,0 +1,460 @@
+COMPREHENSIVE GUIDE TO ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING
+====================================================================
+Version 2.0 | AI Education Series
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 1: WHAT IS ARTIFICIAL INTELLIGENCE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Artificial Intelligence (AI) is the simulation of human intelligence processes
+by computer systems. These processes include learning (acquiring information and
+rules for using information), reasoning (using rules to reach approximate or
+definite conclusions), and self-correction.
+
+AI was formally founded as a discipline in 1956 at a Dartmouth College conference
+where John McCarthy coined the term. Today AI encompasses everything from spam
+filters to autonomous vehicles and large language models.
+
+Types of AI by Capability:
+- Narrow AI (Weak AI): Systems designed for a specific task, such as voice
+  assistants, recommendation systems, and image recognition. All commercially
+  deployed AI today falls in this category.
+- General AI (AGI): Hypothetical AI that can perform any intellectual task a
+  human can. Does not yet exist.
+- Superintelligent AI (ASI): Hypothetical AI that surpasses human intelligence
+  across all domains. Entirely theoretical.
+
+Types of AI by Approach:
+- Rule-based Systems: Follow explicit if-then rules written by experts.
+- Machine Learning: Learn patterns from data without being explicitly programmed.
+- Deep Learning: Use multi-layered neural networks to learn hierarchical
+  representations.
+- Generative AI: Create new content — text, images, audio, code — based on
+  learned patterns.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 2: MACHINE LEARNING FUNDAMENTALS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Machine Learning (ML) is a subset of AI that provides systems the ability to
+automatically learn and improve from experience without being explicitly
+programmed. ML focuses on developing algorithms that can access data and use
+it to learn for themselves.
+
+The three main types of Machine Learning:
+
+1. Supervised Learning
+   The algorithm is trained on labelled data — input-output pairs. It learns
+   to map inputs to outputs and generalises to new, unseen data.
+   Examples: spam detection, image classification, price prediction.
+   Common algorithms: Linear Regression, Logistic Regression, Decision Trees,
+   Random Forests, Support Vector Machines, Neural Networks.
+
+2. Unsupervised Learning
+   The algorithm is given data with no labels and must discover patterns on its
+   own. Common tasks include clustering, dimensionality reduction, and anomaly
+   detection.
+   Examples: customer segmentation, topic modelling, anomaly detection.
+   Common algorithms: K-Means, DBSCAN, PCA, Autoencoders, GANs.
+
+3. Reinforcement Learning
+   An agent learns by interacting with an environment, receiving rewards for
+   correct actions and penalties for wrong ones. Inspired by behavioural
+   psychology.
+   Examples: game playing (AlphaGo), robotic control, recommendation systems.
+   Key concepts: agent, environment, state, action, reward, policy.
+
+Key ML Concepts:
+- Training set: data used to train the model.
+- Validation set: data used to tune hyperparameters.
+- Test set: held-out data used for final evaluation.
+- Overfitting: model memorises training data and fails to generalise.
+- Underfitting: model is too simple to capture patterns in data.
+- Bias-variance tradeoff: balance between model complexity and generalisation.
+- Gradient Descent: optimisation algorithm to minimise loss function.
+- Backpropagation: algorithm for computing gradients in neural networks.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 3: DEEP LEARNING AND NEURAL NETWORKS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Deep Learning is a subset of Machine Learning using artificial neural networks
+with many layers (hence "deep"). These networks are inspired by the structure
+and function of the human brain.
+
+Neural Network Architecture:
+- Input Layer: receives raw data features.
+- Hidden Layers: intermediate layers that learn representations. "Deep" refers
+  to having many hidden layers.
+- Output Layer: produces the final prediction.
+- Neurons (nodes): basic computation units that apply a weighted sum + activation.
+- Weights and Biases: learnable parameters adjusted during training.
+- Activation Functions: introduce non-linearity. Common ones: ReLU, Sigmoid,
+  Tanh, Softmax.
+
+Popular Deep Learning Architectures:
+
+Convolutional Neural Networks (CNN):
+  Designed for grid-like data such as images. Use convolution layers to detect
+  local patterns. Applications: image classification, object detection, medical
+  imaging.
+
+Recurrent Neural Networks (RNN) / LSTM:
+  Designed for sequential data. LSTMs (Long Short-Term Memory) solve the
+  vanishing gradient problem. Applications: time-series, speech recognition,
+  language modelling.
+
+Transformers:
+  Introduced in "Attention is All You Need" (Vaswani et al., 2017). Use
+  self-attention mechanisms to model relationships between all tokens regardless
+  of distance. Foundation of modern LLMs.
+  Key components: multi-head attention, positional encoding, feed-forward layers.
+  Applications: NLP, computer vision (ViT), audio (Whisper).
+
+Generative Adversarial Networks (GAN):
+  Two networks — a Generator and a Discriminator — compete in a zero-sum game.
+  Applications: image synthesis, style transfer, data augmentation.
+
+Diffusion Models:
+  Learn to reverse a noise-adding process. State-of-the-art for image
+  generation. Examples: Stable Diffusion, DALL-E, Midjourney.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 4: LARGE LANGUAGE MODELS (LLMs)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Large Language Models are transformer-based models trained on massive text
+corpora to predict the next token in a sequence. Through this simple objective
+they acquire broad world knowledge and language understanding.
+
+Key LLMs:
+- GPT-4 / GPT-4o (OpenAI): Multimodal, state-of-the-art reasoning.
+- GPT-4o-mini (OpenAI): Smaller, faster, cost-efficient version.
+- Claude 3 (Anthropic): Focus on safety and long context (200K tokens).
+- Gemini (Google): Multimodal, trained on Google's data.
+- LLaMA 3 (Meta): Open-weight model, widely used for fine-tuning.
+- Mistral / Mixtral: Efficient open-source models with strong performance.
+
+LLM Capabilities:
+- Text generation, summarisation, translation, Q&A.
+- Code generation and debugging.
+- Instruction following and chat.
+- Reasoning, maths (with chain-of-thought prompting).
+
+LLM Limitations:
+- Hallucination: confidently generating false facts.
+- Knowledge cutoff: no information after training date.
+- Context length limits (though growing rapidly).
+- Lack of real-time information.
+- Sensitive to prompt wording.
+
+Retrieval-Augmented Generation (RAG) is the primary technique to address
+hallucination and knowledge cutoff limitations.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 5: RETRIEVAL-AUGMENTED GENERATION (RAG)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RAG (Retrieval-Augmented Generation) is an AI framework that combines a
+retrieval system with a generative model. Instead of relying solely on the
+knowledge baked into model weights during training, RAG fetches relevant
+external documents at inference time and provides them to the LLM as context.
+
+Why RAG?
+- Reduces hallucinations by grounding answers in retrieved facts.
+- Overcomes knowledge cutoff: documents can be updated without retraining.
+- Provides source attribution for answers.
+- Cheaper than fine-tuning for adding domain knowledge.
+- Allows personalisation with private/proprietary documents.
+
+Standard RAG Pipeline:
+
+Step 1 — Ingestion (Offline):
+  Load documents → Split into chunks → Embed each chunk → Store in vector DB.
+
+Step 2 — Retrieval (Online):
+  Embed user query → Search vector DB for top-k similar chunks.
+
+Step 3 — Generation (Online):
+  Inject retrieved chunks into prompt → LLM generates grounded answer.
+
+Advanced RAG Techniques:
+- HyDE (Hypothetical Document Embeddings): generate a hypothetical answer,
+  embed it, and use that for retrieval.
+- Self-RAG: LLM decides when to retrieve and critiques its own output.
+- Corrective RAG (CRAG): evaluates retrieved documents and falls back to web
+  search if quality is low.
+- RAG Fusion: generate multiple search queries, retrieve for each, and fuse.
+- Graph RAG: combine vector search with a knowledge graph for structured
+  reasoning.
+- Multi-hop RAG: iterative retrieval for complex multi-step questions.
+
+RAG Evaluation Metrics:
+- Faithfulness: is the answer supported by the context?
+- Answer Relevance: does the answer address the question?
+- Context Precision: what fraction of retrieved chunks are relevant?
+- Context Recall: were all needed chunks retrieved?
+Tools: RAGAS, TruLens, LangSmith.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 6: VECTOR DATABASES AND EMBEDDINGS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Embeddings are dense vector representations of text (or images, audio) that
+capture semantic meaning. Semantically similar content has nearby vectors in
+high-dimensional space.
+
+Popular Embedding Models:
+- text-embedding-3-small (OpenAI): 1536 dims, fast and cost-effective.
+- text-embedding-3-large (OpenAI): 3072 dims, higher quality.
+- text-embedding-ada-002 (OpenAI): 1536 dims, legacy model.
+- all-MiniLM-L6-v2 (HuggingFace): 384 dims, open-source, fast on CPU.
+- BAAI/bge-large-en (HuggingFace): 1024 dims, strong open-source option.
+
+Vector Databases:
+Vector databases store embeddings and support approximate nearest-neighbour
+(ANN) search efficiently.
+
+Qdrant:
+  Open-source, written in Rust. Supports payload filtering, hybrid search
+  (dense + sparse), named vectors, and built-in quantisation. Available as
+  on-prem or Qdrant Cloud. Recommended for production RAG pipelines.
+  Key features: HNSW index, scalar/product quantisation, REST and gRPC API.
+
+Pinecone:
+  Fully managed, serverless. Easy to start but can become expensive at scale.
+
+Weaviate:
+  Open-source, supports multi-modal data and built-in classification.
+
+Chroma:
+  Lightweight, embeds in Python process. Good for prototyping.
+
+FAISS:
+  Facebook AI Similarity Search. Library (not a database). Fast but in-memory
+  only; no persistence without extra code.
+
+pgvector:
+  PostgreSQL extension. Good if you're already on Postgres and want vector
+  search without a separate service.
+
+Similarity Metrics:
+- Cosine Similarity: angle between vectors; most common for text.
+- Dot Product: similar to cosine when vectors are normalised.
+- Euclidean (L2) Distance: absolute distance; less common for text.
+
+Indexing Algorithms:
+- HNSW (Hierarchical Navigable Small World): best recall/speed tradeoff.
+  Used by Qdrant and most modern vector DBs.
+- IVF (Inverted File Index): good for very large datasets.
+- Flat (Exact Search): exhaustive; accurate but slow at scale.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 7: LANGCHAIN FRAMEWORK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LangChain is an open-source framework for building LLM-powered applications.
+It provides abstractions for chaining together components: LLMs, prompts,
+memory, tools, and retrievers.
+
+Core LangChain Components:
+
+LLMs and Chat Models:
+  Wrappers around provider APIs (OpenAI, Anthropic, Google, Hugging Face).
+  ChatOpenAI, ChatAnthropic, ChatGoogleGenerativeAI, etc.
+
+Prompts:
+  PromptTemplate, ChatPromptTemplate, SystemMessage, HumanMessage.
+  Support for few-shot examples, partial formatting, and input validation.
+
+Chains (LCEL — LangChain Expression Language):
+  Compose components with the pipe operator (|).
+  Example: retriever | format_docs | prompt | llm | StrOutputParser()
+  Benefits: streaming, batching, async, tracing out of the box.
+
+Retrievers:
+  Abstraction over vector stores. Support similarity, MMR (Maximal Marginal
+  Relevance), and multi-query retrieval.
+
+Memory:
+  ConversationBufferMemory, ConversationSummaryMemory, etc. for multi-turn chat.
+
+Tools and Agents:
+  LangChain agents use LLMs to decide which tools to call (web search, code
+  execution, APIs). Integrated with LangGraph for stateful workflows.
+
+LangGraph:
+  Extension for building stateful, multi-actor graph-based workflows. Supports
+  loops, branching, and persistent state. Ideal for agentic RAG and copilots.
+
+LangSmith:
+  Observability platform for LangChain apps. Trace every LLM call, evaluate
+  outputs, and run regression tests.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 8: PROMPT ENGINEERING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Prompt engineering is the practice of designing inputs to LLMs to obtain
+desired outputs. It is a critical skill for building reliable AI applications.
+
+Core Techniques:
+
+Zero-Shot Prompting:
+  Ask the model directly without examples.
+  "Classify the sentiment of: 'The product is great!'"
+
+Few-Shot Prompting:
+  Provide 2–5 examples of input-output pairs before the actual query.
+  Significantly improves performance on classification and formatting tasks.
+
+Chain-of-Thought (CoT):
+  Ask the model to reason step-by-step before giving the final answer.
+  "Let's think step by step." increases accuracy on reasoning tasks.
+
+System Prompts:
+  Instructions given in the system role to set behaviour, persona, and
+  constraints. Never visible to users in production apps.
+
+Role Prompting:
+  "You are an expert financial analyst…" primes the model with domain context.
+
+Structured Output Prompting:
+  Ask for JSON, XML, or specific formats. Use with response_format={"type":
+  "json_object"} in OpenAI API for reliable structured outputs.
+
+Temperature and Sampling:
+  Temperature = 0: deterministic, best for factual Q&A.
+  Temperature = 0.7–1.0: more creative, good for brainstorming.
+  Top-p (nucleus sampling): controls vocabulary diversity.
+
+Context Window Management:
+  Every LLM has a maximum context window (e.g., 128K for GPT-4o).
+  Strategies: summarise old turns, truncate, or use sliding window.
+
+Guardrails:
+  System prompts that restrict the model to a topic domain.
+  "Answer ONLY using the provided context. Do not use prior knowledge."
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 9: AI SAFETY AND ETHICS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AI Safety refers to the field of ensuring AI systems behave as intended and
+remain beneficial as they become more capable.
+
+Key Safety Concerns:
+
+Alignment:
+  Ensuring AI goals and values align with human intentions. Misaligned AI may
+  optimise for proxy metrics that diverge from true human values.
+
+Robustness:
+  AI systems should perform reliably under distribution shift, adversarial
+  inputs, and edge cases.
+
+Interpretability (Explainability):
+  Understanding why a model makes a specific decision. SHAP, LIME, and
+  mechanistic interpretability research address this.
+
+Bias and Fairness:
+  Models trained on biased data perpetuate and amplify societal biases. Auditing
+  datasets and model outputs is essential before deployment.
+
+Privacy:
+  Models can memorise and leak training data. Differential privacy and
+  federated learning are mitigation strategies.
+
+Prompt Injection:
+  Malicious content in retrieved documents or user input that hijacks LLM
+  behaviour. Critical concern in RAG systems. Mitigated by output validation,
+  sandboxing, and tools like LLM Guard.
+
+LLM Guard:
+  Open-source library for input/output scanning of LLM applications.
+  Input scanners: PromptInjection, Toxicity, BanTopics, TokenLimit, PII.
+  Output scanners: Relevance, NoRefusal, Bias, Sensitive.
+
+OWASP Top 10 for LLM Applications:
+  1. Prompt Injection
+  2. Insecure Output Handling
+  3. Training Data Poisoning
+  4. Model Denial of Service
+  5. Supply Chain Vulnerabilities
+  6. Sensitive Information Disclosure
+  7. Insecure Plugin Design
+  8. Excessive Agency
+  9. Overreliance
+  10. Model Theft
+
+Responsible AI Principles:
+  - Fairness: do not discriminate based on protected characteristics.
+  - Reliability: behave consistently and safely.
+  - Privacy: protect user data.
+  - Inclusiveness: serve diverse users.
+  - Transparency: be clear about AI capabilities and limitations.
+  - Accountability: maintain human oversight.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHAPTER 10: MLOPS AND PRODUCTION AI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MLOps is the practice of streamlining the ML lifecycle from development to
+production deployment and monitoring.
+
+Key MLOps Components:
+
+Version Control:
+  Git for code. DVC (Data Version Control) for datasets and model artefacts.
+
+Experiment Tracking:
+  MLflow, Weights & Biases (W&B), Neptune — log metrics, hyperparameters,
+  and artefacts across experiments.
+
+Model Registry:
+  MLflow Model Registry, Hugging Face Hub — store, version, and stage models.
+
+CI/CD for ML:
+  GitHub Actions, GitLab CI — automate testing, training, evaluation, and
+  deployment pipelines. Key stages: lint → test → train → evaluate → deploy.
+
+Containerisation:
+  Docker for packaging models and dependencies. Key: CPU-only builds for
+  inference-only containers to reduce size and cost.
+
+Orchestration:
+  AWS ECS Fargate: serverless containers; no cluster management required.
+  Good for stateful long-running services (LangGraph, llm-guard model loading).
+  Kubernetes: full orchestration for large-scale ML systems.
+
+Serving:
+  FastAPI: fast, async, OpenAPI-native REST framework for ML APIs.
+  Triton Inference Server: NVIDIA, for GPU inference at scale.
+  Ray Serve: distributed serving with Python.
+
+Monitoring:
+  Data drift detection: Evidently AI, Whylogs.
+  Model performance: track accuracy, latency, and error rates in production.
+  LLM-specific: RAGAS for RAG quality, LangSmith for tracing.
+
+Secrets Management:
+  AWS SSM Parameter Store, AWS Secrets Manager, HashiCorp Vault.
+  Never embed secrets in code or Docker images.
+
+Redis in Production AI:
+  Redis is used as: semantic cache for LLM calls (reduce cost and latency),
+  rate limiting store (sliding window counters), session state for chatbots,
+  and message broker for async inference queues.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+END OF DOCUMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

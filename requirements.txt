@@ -1,0 +1,44 @@
+# ── Core ─────────────────────────────────────────────────────────────────────
+streamlit>=1.35.0
+
+# ── LangChain stack ───────────────────────────────────────────────────────────
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-openai>=0.2.0
+langchain-community>=0.3.0
+langchain-qdrant>=0.2.0
+langchain_text_splitters 
+# ── OpenAI ────────────────────────────────────────────────────────────────────
+openai>=1.45.0
+tiktoken>=0.7.0
+
+# ── Vector DB ─────────────────────────────────────────────────────────────────
+qdrant-client>=1.11.0
+
+# ── Cache / rate-limiting ─────────────────────────────────────────────────────
+redis>=5.0.0
+
+# ── Document loading ──────────────────────────────────────────────────────────
+pypdf>=4.3.0
+unstructured>=0.12.0
+
+# ── Config ────────────────────────────────────────────────────────────────────
+python-dotenv>=1.0.0
+pydantic-settings
+# ─────────────────────────────────────────────────────────────────────────────
+# OPTIONAL — LLM Guard (ML-based security scanning)
+# Set ENABLE_LLM_GUARD=true in .env to activate Tier 3 security.
+#
+# Install SEPARATELY after the above deps to pick the right torch variant:
+#
+#   CPU only (recommended for containers, no GPU):
+#       pip install torch --index-url https://download.pytorch.org/whl/cpu
+#       pip install llm-guard
+#
+#   GPU (if CUDA 11.8+ is available):
+#       pip install torch --index-url https://download.pytorch.org/whl/cu118
+#       pip install llm-guard
+#
+# Do NOT add llm-guard or torch to this file if you are building a
+# multi-stage Docker image — install them in the correct stage only.
+# ─────────────────────────────────────────────────────────────────────────────
