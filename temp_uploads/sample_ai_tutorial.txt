@@ -458,3 +458,238 @@ Redis in Production AI:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 END OF DOCUMENT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AI & MACHINE LEARNING: A PRACTICAL TUTORIAL
+=============================================
+
+This document is a demo knowledge base for the RAG Q&A Bot. It covers
+machine learning fundamentals, retrieval-augmented generation, embeddings,
+vector search, and AI application security.
+
+
+1. SUPERVISED VS UNSUPERVISED LEARNING
+---------------------------------------
+
+Supervised learning trains a model on labeled data, meaning each training
+example comes with a known correct answer. The model learns a mapping from
+inputs to outputs and is evaluated by how well it predicts labels on unseen
+data. Common tasks include classification (e.g. spam vs not spam, image
+categories) and regression (e.g. predicting house prices, stock returns).
+Typical algorithms include linear and logistic regression, decision trees,
+random forests, gradient boosting (XGBoost, LightGBM), support vector
+machines, and neural networks trained with backpropagation against a
+labeled target.
+
+Unsupervised learning works with unlabeled data, where the goal is to
+discover structure or patterns rather than predict a known answer. There is
+no "correct" output to compare against during training. Common tasks
+include clustering (grouping similar data points, e.g. k-means, DBSCAN,
+hierarchical clustering), dimensionality reduction (compressing data while
+preserving structure, e.g. PCA, t-SNE, UMAP), and anomaly detection.
+
+The key distinction is the presence or absence of labeled targets. Semi-
+supervised learning sits between the two, using a small amount of labeled
+data alongside a larger pool of unlabeled data. Self-supervised learning,
+which underlies most modern LLM pretraining, creates its own labels from
+the input data itself (e.g. predicting the next token in a sequence),
+blurring the line further but is generally grouped with unsupervised
+methods since no human-provided labels are required.
+
+
+2. HOW RETRIEVAL-AUGMENTED GENERATION (RAG) REDUCES HALLUCINATIONS
+--------------------------------------------------------------------
+
+LLMs generate text by predicting the most probable next token based on
+patterns learned during training. When a model is asked about something
+outside its training data, recent events, private documents, or niche
+facts, it can produce fluent but factually incorrect text. This is called
+hallucination, and it happens because the model is optimizing for
+plausibility, not for verified truth, and it has no built-in way to check
+its own outputs against a ground-truth source.
+
+Retrieval-Augmented Generation addresses this by giving the model relevant
+external context at inference time, rather than relying purely on what it
+memorized during training. A typical RAG pipeline works like this: a
+user's query is converted into an embedding vector, that vector is used to
+search a vector database for the most semantically similar chunks of
+trusted source documents, and those chunks are inserted into the prompt
+alongside the original question. The LLM then generates its answer
+grounded in that retrieved context, often citing which chunk supports which
+claim.
+
+This reduces hallucinations in two main ways. First, the model has direct,
+verifiable source text in front of it, so it can quote or paraphrase
+instead of guessing from memory. Second, because RAG systems can return
+"I don't know" or refuse to answer when no relevant context is found,
+gaps in knowledge become visible instead of being silently filled in with
+fabricated text. RAG does not eliminate hallucination entirely; a model can
+still misread or contradict the retrieved context, and weak retrieval
+(missing or irrelevant chunks) leads to weak grounding. Techniques like
+HyDE (Hypothetical Document Embeddings), reranking, and self-reflective
+RAG (where the model critiques its own draft answer against the source
+before finalizing it) are used to further reduce these failure modes.
+
+
+3. OPENAI EMBEDDING MODELS AND THEIR DIMENSIONS
+--------------------------------------------------
+
+An embedding model converts text into a fixed-length vector of numbers
+that captures its semantic meaning, such that similar pieces of text end
+up close together in vector space. OpenAI currently offers three embedding
+models:
+
+- text-embedding-3-small: 1536 dimensions. Optimized for cost and speed
+  while still offering strong retrieval performance. This is the default
+  choice for most RAG applications, including this bot.
+- text-embedding-3-large: 3072 dimensions. Higher accuracy on retrieval
+  and semantic similarity benchmarks, at higher cost and storage overhead.
+  Useful when retrieval quality is the bottleneck.
+- text-embedding-ada-002 (legacy): 1536 dimensions. Superseded by the v3
+  models, which outperform it at a similar or lower price point.
+
+Both v3 models support a "dimensions" parameter that lets you shorten the
+output vector (for example, requesting 1536 dimensions from the 3072-
+dimension large model) at a small accuracy cost, which is useful for
+reducing vector database storage and search latency without switching
+models entirely. Choosing an embedding model is a trade-off between
+retrieval quality, vector storage cost, and query latency — smaller
+dimensions mean less storage and faster nearest-neighbor search, but can
+lose some nuance in highly technical or ambiguous text.
+
+
+4. HNSW AND VECTOR DATABASES
+--------------------------------
+
+HNSW (Hierarchical Navigable Small World) is a graph-based algorithm for
+approximate nearest neighbor (ANN) search. Instead of comparing a query
+vector against every stored vector (which becomes too slow at scale),
+HNSW organizes vectors into multiple layers of graphs. The top layer has
+few nodes with long-range connections for fast coarse navigation; lower
+layers have progressively more nodes with shorter connections for fine-
+grained search. A search starts at the top layer and "zooms in" layer by
+layer, quickly narrowing down to a small candidate set of nearest
+neighbors without scanning the whole dataset.
+
+This makes HNSW extremely fast for similarity search even over millions
+of vectors, at the cost of being approximate rather than exact — it may
+occasionally miss the true nearest neighbor in exchange for large speed
+gains. The trade-off is tunable: increasing the graph's connectivity and
+search breadth improves recall (accuracy) at the cost of speed and memory.
+
+Several vector databases use HNSW as their core indexing method, including
+Qdrant (used in this project), Weaviate, and Milvus. Pinecone uses its own
+proprietary indexing approach, and Postgres's pgvector extension supports
+both HNSW and the older IVFFlat method. Beyond indexing, vector databases
+typically add features RAG applications rely on: metadata filtering
+(restricting search to documents matching certain tags), hybrid search
+(combining vector similarity with traditional keyword search), and
+payload storage so each vector can carry its original text and source
+metadata alongside it.
+
+
+5. OWASP TOP 10 FOR LLM APPLICATIONS (2025)
+-----------------------------------------------
+
+The OWASP Top 10 for LLM Applications is a community-maintained list of
+the most critical security risks in generative AI systems, first
+published in 2023 and substantially revised for 2025 to reflect the rise
+of RAG pipelines and autonomous agents. The current ten categories are:
+
+LLM01:2025 Prompt Injection — attackers craft input that overrides the
+  system's intended instructions, either directly in the user's message
+  or indirectly hidden inside a document, webpage, or email the model
+  later processes.
+LLM02:2025 Sensitive Information Disclosure — the model leaks private,
+  proprietary, or regulated data through its outputs, logs, or cached
+  responses.
+LLM03:2025 Supply Chain — vulnerabilities introduced through third-party
+  models, datasets, fine-tuning adapters, or libraries the application
+  depends on.
+LLM04:2025 Data and Model Poisoning — tampered training or fine-tuning
+  data introduces hidden backdoors or biased behavior.
+LLM05:2025 Improper Output Handling — insufficient validation or
+  sanitization of model output before it's used downstream (e.g. executed
+  as code or rendered as HTML), enabling injection-style attacks.
+LLM06:2025 Excessive Agency — an LLM-based agent is granted more tools,
+  permissions, or autonomy than it needs, increasing the blast radius of
+  any mistake or manipulation.
+LLM07:2025 System Prompt Leakage — system prompts are exposed, which
+  matters because system prompts should never be treated as a security
+  boundary in the first place.
+LLM08:2025 Vector and Embedding Weaknesses — risks specific to RAG
+  systems, such as poisoned or manipulated content being embedded and
+  retrieved as if it were trustworthy context, or sensitive data leaking
+  through stored vectors.
+LLM09:2025 Misinformation — the model produces confident, plausible-
+  sounding but false output that users act on without verification.
+LLM10:2025 Unbounded Consumption — uncontrolled or excessive resource
+  usage (queries, tokens, compute) leads to denial of service or runaway
+  cost, sometimes called "denial of wallet."
+
+For a RAG application like this one, Prompt Injection, Sensitive
+Information Disclosure, Vector and Embedding Weaknesses, and Unbounded
+Consumption are the most directly relevant categories, which is why this
+project layers input sanitization, rate limiting, and ML-based scanning on
+top of the core retrieval pipeline.
+
+
+6. LLM GUARD AND PROMPT INJECTION PROTECTION
+------------------------------------------------
+
+LLM Guard is an open-source toolkit of input and output "scanners" that
+sit between the user, the LLM, and the application, inspecting text before
+it's processed and after it's generated. Rather than relying on the LLM
+itself to police its own inputs and outputs, LLM Guard uses dedicated
+classifier models and rule-based checks for specific risks.
+
+On the input side, common scanners include PromptInjection (a classifier
+trained to detect text that resembles known jailbreak or instruction-
+override patterns), Toxicity (flags harmful or abusive language), and
+TokenLimit (rejects inputs that are unreasonably long, which both controls
+cost and reduces the surface area for hidden injected instructions). On
+the output side, a Relevance scanner checks whether the model's answer
+actually relates to the retrieved context and the user's question, which
+helps catch cases where the model has drifted off-topic or been steered by
+an injected instruction.
+
+Prompt injection detection is inherently probabilistic, not a guarantee.
+A classifier can be evaded by novel phrasing it wasn't trained on, so LLM
+Guard is best understood as one layer in a defense-in-depth strategy.
+Combining it with simpler, always-on protections, regex-based input
+sanitization, strict separation of system instructions from user and
+retrieved content, rate limiting, and output validation, narrows the
+attack surface even when any single layer can be bypassed.
+
+
+7. THE ROLE OF REDIS IN PRODUCTION AI SYSTEMS
+--------------------------------------------------
+
+Redis is an in-memory data store frequently used as supporting
+infrastructure in production LLM applications, mainly because LLM calls
+are slow and expensive compared to a cache lookup. Common uses include:
+
+- Response caching: hashing a normalized query (e.g. with SHA-256) and
+  storing the LLM's answer against that hash, so an identical or
+  near-identical question can be served instantly from cache instead of
+  re-running retrieval and generation. A time-to-live (TTL) keeps cached
+  answers from going stale indefinitely.
+- Semantic caching: a variant where cache lookups are based on embedding
+  similarity rather than exact text match, so paraphrased questions can
+  still hit the cache.
+- Rate limiting: Redis's atomic counters and built-in expiry make it a
+  natural fit for sliding-window or token-bucket rate limiters that throttle
+  how many requests a user can make in a given time window, directly
+  mitigating Unbounded Consumption risk.
+- Session and conversation state: storing recent chat history or
+  multi-turn context so a stateless API server can maintain continuity
+  across requests without hitting a slower primary database.
+- Vector search: modern Redis (via the RediSearch module) can also store
+  and query vector embeddings directly, which lets some teams use a single
+  Redis deployment for both caching and retrieval, though dedicated vector
+  databases like Qdrant typically offer more specialized indexing options
+  for large-scale RAG workloads.
+
+Because Redis operates in memory, it adds minimal latency to the request
+path while meaningfully reducing both response time and the cost of
+repeated LLM and embedding API calls, making it a near-default component
+in production-grade RAG architectures.

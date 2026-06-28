@@ -86,7 +86,7 @@ File / Directory
 | **Deduplication** | Automatic point ID verification before upload to skip duplicates |
 | **Document types** | PDF, TXT, Markdown, mixed directories |
 | **UI** | Glassmorphic cyber-dark UI, high-contrast typography, styled citation cards, cache metrics |
-| **Deployment** | Docker + docker-compose, Streamlit Cloud ready |
+| **Deployment** | Render, Streamlit Cloud ready |
 
 ---
 
@@ -103,22 +103,15 @@ source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2. Start backend services
+### 2. Configure environment
 
-```bash
-docker compose up -d
-# Qdrant → http://localhost:6333
-# Redis  → localhost:6379
-```
+Create a `.env` file in the project root and set the required variables
+(see [Configuration Reference](#configuration-reference)) — at minimum
+`OPENAI_API_KEY`, plus your Qdrant Cloud and Upstash Redis credentials.
+See [Using Cloud Services](#using-cloud-services) below for setup steps —
+both have generous free tiers, so no local database containers are needed.
 
-### 3. Configure environment
-
-```bash
-cp .env.example .env
-# Edit .env — at minimum set OPENAI_API_KEY
-```
-
-### 4. Run the app
+### 3. Run the app
 
 ```bash
 streamlit run app.py
@@ -147,6 +140,14 @@ then upload a document to start chatting.
    ```
    REDIS_URL=rediss://default:your-token@your-endpoint.upstash.io:6379
    ```
+
+### Render Deployment
+1. Push your project to a GitHub repository.
+2. Go to [Render](https://render.com) → **New** → **Web Service** → connect your repo.
+3. Set the **Build Command**: `pip install -r requirements.txt`
+4. Set the **Start Command**: `streamlit run app.py --server.port $PORT --server.address 0.0.0.0`
+5. Under **Environment**, add your variables (`OPENAI_API_KEY`, `QDRANT_URL`, `QDRANT_API_KEY`, `QDRANT_COLLECTION`, `REDIS_URL`, etc.)
+6. Click **Create Web Service** to deploy.
 
 ### Streamlit Cloud Deployment
 1. Push your project files to a GitHub repository.
@@ -212,30 +213,23 @@ Without LLM Guard, Tiers 1 & 2 remain fully active.
 
 ```
 rag_qa_bot/
-├── app.py              ← Streamlit UI (entry point)
-├── config.py           ← Centralised env configuration
-├── security.py         ← 3-tier security layer
-├── cache.py            ← Redis cache (get/set/invalidate/stats)
-├── ingest.py           ← Document ingestion → Qdrant
-├── rag_pipeline.py     ← LCEL RAG chain + cache integration
+├── .gitignore
+├── LICENSE
+├── README.md
+├── app.py                 ← Streamlit UI (entry point)
+├── cache.py               ← Redis response cache (get/set/invalidate/stats)
+├── config.py              ← Centralised env configuration
+├── embedding_cache.py     ← Redis-backed embedding cache (skips re-embedding)
+├── embedding_utils.py     ← Embedding generation helpers
+├── hashing.py             ← SHA-256 hashing utilities (cache keys, dedup)
+├── ingest.py              ← Document ingestion → Qdrant
+├── qdrant_utils.py        ← Qdrant client & collection helper functions
+├── rag_pipeline.py        ← LCEL RAG chain + cache integration
 ├── requirements.txt
-├── .env.example
-├── Dockerfile          ← Multi-stage, CPU-only
-├── docker-compose.yml  ← Local Qdrant + Redis
-└── docs/
-    └── sample_ai_tutorial.txt   ← Demo knowledge base
-```
-
----
-
-## Docker Build
-
-```bash
-# Build
-docker build -t rag-qa-bot:latest .
-
-# Run (all env vars passed via --env-file)
-docker run -p 8501:8501 --env-file .env rag-qa-bot:latest
+├── security.py            ← 3-tier security layer
+├── docs/
+│   └── sample_ai_tutorial.txt   ← Demo knowledge base
+└── temp_uploads/          ← Scratch space for files awaiting ingestion
 ```
 
 ---
@@ -258,8 +252,8 @@ docker run -p 8501:8501 --env-file .env rag-qa-bot:latest
 |---|---|
 | Framework | [LangChain](https://python.langchain.com) 0.3 (LCEL) |
 | LLM | [OpenAI](https://platform.openai.com) GPT-4o-mini |
-| Vector DB | [Qdrant](https://qdrant.tech) (local / Cloud) |
-| Cache | [Redis](https://redis.io) (local / Upstash) |
+| Vector DB | [Qdrant](https://qdrant.tech) (Cloud) |
+| Cache | [Redis](https://redis.io) (Upstash) |
 | Security | [LLM Guard](https://llm-guard.com) (optional) |
 | UI | [Streamlit](https://streamlit.io) |
-| Containerisation | Docker (multi-stage, CPU-only) |
+| Deployment | [Render](https://render.com) |

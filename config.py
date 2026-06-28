@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     # ---------------- Qdrant ----------------
     QDRANT_URL: str
     QDRANT_API_KEY: str = ""
-    QDRANT_COLLECTION: str = "rag_knowledge_base"
+    QDRANT_COLLECTION: str = "document"
 
     # ---------------- Redis ----------------
     REDIS_URL: str
